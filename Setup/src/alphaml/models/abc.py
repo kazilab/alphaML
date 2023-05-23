@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import plotly.io as pio
 import pickle
 from ..utils.run_model import run_model
-from ..utils.metrics import test_prediction, neglog2rmss, custom_score, kappa_mcc_error
+from ..utils.metrics import test_prediction, neglog2rmsl, custom_score, kappa_mcc_error
 from ..utils.utils import sample_weight_, plot_roc_auc_acc
 from sklearn.tree import ExtraTreeClassifier
 from sklearn.ensemble import AdaBoostClassifier as Classifier
