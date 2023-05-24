@@ -1,6 +1,6 @@
 The alphaML is developed for research purposes only.
 The platform has been tested using pharmacogenomic data from cell lines and human patients.
-The platform comes with no guarantee and must be used with the user own responsibility. 
+The platform comes with no guarantee and must be used with the user's own responsibility. 
 
 We recommend to use Anaconda environment and use "pip install alphaml" for installation.
 
