@@ -174,7 +174,7 @@ def preprocessing(data_path,
             }
         }
         if feature == 'Suggested':
-            selected_features = pd.read_csv(result_path_+'suggested_features.csv',
+            selected_features = pd.read_csv(data_path+'suggested_features.csv',
                                             index_col=None,
                                             header=0,
                                             sep=',',
