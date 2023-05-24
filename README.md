@@ -7,3 +7,5 @@ We recommend to use Anaconda environment and use "pip install alphaml" for insta
 Platform can also be used from a Python virtual environment.
 
 To run GUI use "python -c "from alphaml import guir"
+
+![image](https://github.com/kazilab/alphaML/assets/67221376/e1820c3e-8c81-4d2d-a3a4-d3b9096c0f05)
