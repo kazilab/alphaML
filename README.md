@@ -12,6 +12,6 @@ It will open the following window.
 
 To perform a prediction use "python -c "from alphaml import guip""
 The following GUI will appear.
-https://github.com/kazilab/alphaML/blob/fe0fc10d1e6e6deee40c7e6c029d0b5ee1ea0e2b/guip.jpg
+![image](https://github.com/kazilab/alphaML/blob/fe0fc10d1e6e6deee40c7e6c029d0b5ee1ea0e2b)
 
 
