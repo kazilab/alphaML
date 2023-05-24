@@ -1,23 +1,9 @@
 The alphaML is developed for research purposes only.
-The model has been tested using a small amount of data and has been tested on a small dataset.
-Although it performed well, it does not guarantee true predictions. 
+The platform has been tested using pharmacogenomic data from cell lines and human patients.
+The platform comes with no guarantee and must be used with the user own responsibility. 
 
-On Windows:
-python setup.py install
+We recommend to use Anaconda environment and use "pip install alphaml" for installation.
 
-On Linux:
-sudo python setup.py install 
+Platform can also be used from a Python virtual environment.
 
-On Mac OS X:
-sudo python ./setup.py install 
-
-
-To run demo predictions:
-
-Jupyter Notebook script
-
-from import alphaml import aml
-aml('XGBoost')
-
-
-To run a prediction:
+To run GUI use "python -c "from alphaml import guir"
