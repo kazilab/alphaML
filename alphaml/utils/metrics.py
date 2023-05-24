@@ -218,9 +218,9 @@ class BinaryClassificationLosses:
 
 
 def kappa_mcc_error(y_true, y_pred):
-    kappa = cohen_kappa_score(y_true, y_pred)
-    mcc = matthews_corrcoef(y_true, y_pred)
-    return 1-(kappa*mcc)**0.5
+    kappa = 1 - cohen_kappa_score(y_true, y_pred)
+    mcc = 1 - matthews_corrcoef(y_true, y_pred)
+    return (kappa*mcc)**0.5
 
 # Make a custom scorer to use for optimization considering test and train scores
 
@@ -231,9 +231,9 @@ def custom_score(model, x_train, y_train, x_test, y_test):
 
     train_score = kappa_mcc_error(y_train, train_pred)
     test_score = kappa_mcc_error(y_test, test_pred)
-    diff = (train_score - test_score)**2
-    ts = test_score**2
-    return (diff*ts)**0.25
+    diff = ((train_score - test_score)**2)**0.5
+    
+    return (diff*test_score)**0.5
 
 # ***************** Confusion Matrix by SKLEARN **********************************
 
