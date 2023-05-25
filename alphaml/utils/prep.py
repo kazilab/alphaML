@@ -100,26 +100,28 @@ def preprocessing(data_path,
                                              low_memory=False
                                              )
     # Encode labels "Change here drug name if you have a table with multiple drugs
+    pos_class = pos_class.strip().lower()
+    neg_class = neg_class.strip().lower()
     data_labels[column_name] = data_labels[column_name].apply(
         lambda x: int(1) if x.strip().lower() == pos_class else int(0) if x.strip().lower() == neg_class else None)
     labels = data_labels[column_name]
 
-    def apply_fs(feature, df1, df2, labels_, result_path_, fs_name):
+    def apply_fs(feature, df1, df2, fs_name):
 
         def execute_feature_selection_method(method, kwargs):
             return method(**kwargs)
 
-        def save_and_log_selected_features(feature_, path_, fs_name_):
-            if not feature_:
+        def save_and_log_selected_features():
+            if not feature:
                 raise ValueError(
                     'Method returned empty feature. Please consider an alternative method.')
-            elif isinstance(feature_, Exception):
+            elif isinstance(feature, Exception):
                 raise ValueError(
                     f'Method raised an error. Please consider an alternative method.')
 
-            df = pd.DataFrame(feature_, columns=['Selected features'])
-            df.to_csv(f"{path_}{fs_name_}.csv", index=False)
-            logging.info(f"select by {fs_name_}, and saved as features_{fs_name_}.csv in alphaML_results folder")
+            df = pd.DataFrame(feature, columns=['Selected features'])
+            df.to_csv(f"{result_path}{fs_name}.csv", index=False)
+            logging.info(f"select by {fs_name}, and saved as features_{fs_name}.csv in alphaML_results folder")
 
         FEATURE_SELECTION_METHODS = {
             'HVF': {
@@ -152,25 +154,25 @@ def preprocessing(data_path,
             },
             'SelectByRF': {
                 'function': select_from_rf,
-                'kwargs': {'x_train': df2, 'y_train': labels_, 'threshold': threshold, 'max_features': max_features},
+                'kwargs': {'x_train': df2, 'y_train': labels, 'threshold': threshold, 'max_features': max_features},
             },
             'RecursiveFeatElim': {
                 'function': recursive_feature_elimination,
-                'kwargs': {'x_train': df2, 'y_train': labels_, 'min_sel_features_rfe': min_sel_features_rfe},
+                'kwargs': {'x_train': df2, 'y_train': labels, 'min_sel_features_rfe': min_sel_features_rfe},
             },
             'SeqFeatSel': {
                 'function': seq_feat_sel,
-                'kwargs': {'x_train': df2, 'y_train': labels_, 'min_sel_features_sfs': min_sel_features_sfs},
+                'kwargs': {'x_train': df2, 'y_train': labels, 'min_sel_features_sfs': min_sel_features_sfs},
             },
             'ModelX': {
                 'function': modelx,
-                'kwargs': {'data': df2, 'dataY': labels_, 'latent_dim': latent_dim,
+                'kwargs': {'data': df2, 'dataY': labels, 'latent_dim': latent_dim,
                            'min_sel_features': min_sel_features,
                            'fdr': fdr, 'result_path': result_path},
             },
             'IterativeFeatSel': {
                 'function': iterative_feature_selector,
-                'kwargs': {'x_train': df2, 'y_train': labels_},
+                'kwargs': {'x_train': df2, 'y_train': labels},
             }
         }
         if feature == 'Suggested':
@@ -194,7 +196,7 @@ def preprocessing(data_path,
                 print(error_txt+f'we reverted the list to the current dataframe index')
             else:
                 selected_features = selected_features
-            save_and_log_selected_features(selected_features, result_path, fs_name)
+            save_and_log_selected_features()
         else:
             raise ValueError('Please provide a valid feature selection method!')
 
@@ -203,29 +205,21 @@ def preprocessing(data_path,
     df11, df21 = apply_fs(features,
                           data_for_feature_selection,
                           labeled_data,
-                          labels,
-                          result_path,
                           column_name + '_' + features + '_' + 'None' + '_' + 'None' + '_' + 'None' + '_Feat_M1'
                           )
     df12, df22 = apply_fs(features2,
                           df11,
                           df21,
-                          labels,
-                          result_path,
                           column_name + '_' + features + '_' + features2 + '_' + 'None' + '_' + 'None' + '_Feat_M2'
                           )
     df13, df23 = apply_fs(features3,
                           df12,
                           df22,
-                          labels,
-                          result_path,
                           column_name + '_' + features + '_' + features2 + '_' + features3 + '_' + 'None' + '_Feat_M3'
                           )
     df14, df24 = apply_fs(features4,
                           df13,
                           df23,
-                          labels,
-                          result_path,
                           column_name + '_' + features + '_' + features2 + '_' + features3 + '_' + features4 + '_Feat_M4'
                           )
 
