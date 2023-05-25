@@ -111,15 +111,15 @@ def preprocessing(data_path,
         def execute_feature_selection_method(method, kwargs):
             return method(**kwargs)
 
-        def save_and_log_selected_features():
-            if not feature:
+        def save_and_log_selected_features(selected_features_):
+            if not selected_features_:
                 raise ValueError(
                     'Method returned empty feature. Please consider an alternative method.')
-            elif isinstance(feature, Exception):
+            elif isinstance(selected_features_, Exception):
                 raise ValueError(
                     f'Method raised an error. Please consider an alternative method.')
 
-            df = pd.DataFrame(feature, columns=['Selected features'])
+            df = pd.DataFrame(selected_features_, columns=['Selected features'])
             df.to_csv(f"{result_path}{fs_name}.csv", index=False)
             logging.info(f"select by {fs_name}, and saved as features_{fs_name}.csv in alphaML_results folder")
 
@@ -196,7 +196,7 @@ def preprocessing(data_path,
                 print(error_txt+f'we reverted the list to the current dataframe index')
             else:
                 selected_features = selected_features
-            save_and_log_selected_features()
+            save_and_log_selected_features(selected_features)
         else:
             raise ValueError('Please provide a valid feature selection method!')
 
