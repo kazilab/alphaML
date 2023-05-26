@@ -241,8 +241,8 @@ def preprocessing(data_path,
     else:
         raise ValueError('Please provide a valid normalization method!')
 
-    sel_labeled_data4.to_csv(data_path + 'normalized_labeled_data.csv')
-    sel_unlabeled_data4.to_csv(data_path + 'normalized_unlabeled_data.csv')
+    sel_labeled_data4.to_csv(result_path + column_name + '_' + features + 'normalized_labeled_data.csv')
+    sel_unlabeled_data4.to_csv(result_path + column_name + '_' + features + 'normalized_unlabeled_data.csv')
     return labels, sel_labeled_data4, sel_unlabeled_data4
 
 
