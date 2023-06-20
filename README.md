@@ -8,11 +8,11 @@ Run Anaconda Powershell Prompt and use "pip install alphaml" for installation.
 To run platform GUI use "python -c "from alphaml import guir"".
 
 It will open the following window.
-![image](https://github.com/kazilab/alphaML/assets/67221376/e1820c3e-8c81-4d2d-a3a4-d3b9096c0f05)
+![image](https://github.com/kazilab/alphaML/blob/main/guir.png)
 
 To perform a prediction use "python -c "from alphaml import guip"".
 
 The following GUI will appear.
-![image](https://github.com/kazilab/alphaML/blob/main/guip.jpg)
+![image](https://github.com/kazilab/alphaML/blob/main/guip.png)
 
 
