@@ -99,14 +99,14 @@ def preprocessing(data_path,
                                              sep=',',
                                              low_memory=False
                                              )
-    # Encode labels "Change here drug name if you have a table with multiple drugs
+    # Encode labels
     pos_class = pos_class.strip().lower()
     neg_class = neg_class.strip().lower()
     data_labels[column_name] = data_labels[column_name].apply(
         lambda x: int(1) if x.strip().lower() == pos_class else int(0) if x.strip().lower() == neg_class else None)
     labels = data_labels[column_name]
 
-    def apply_fs(feature, df1, df2, fs_name):
+    def apply_(feature, df1, df2, fs_name):
 
         def execute_feature_selection_method(method, kwargs):
             return method(**kwargs)
@@ -123,7 +123,7 @@ def preprocessing(data_path,
             df.to_csv(f"{result_path}{fs_name}.csv", index=False)
             logging.info(f"select by {fs_name}, and saved as features_{fs_name}.csv in alphaML_results folder")
 
-        FEATURE_SELECTION_METHODS = {
+        feature_selection_methods = {
             'HVF': {
                 'function': hvf,
                 'kwargs': {'data': df1, 'log_type': log_type, 'n_top_features': n_top_features, 'min_disp': min_disp}
@@ -185,10 +185,10 @@ def preprocessing(data_path,
             logging.info("Suggested features is being used")
         elif feature == 'None':
             selected_features = df2.columns.tolist()
-        elif feature in FEATURE_SELECTION_METHODS:
+        elif feature in feature_selection_methods:
             print(f'Selecting features by {feature}')
-            selected_features = execute_feature_selection_method(FEATURE_SELECTION_METHODS[feature]['function'],
-                                                                 FEATURE_SELECTION_METHODS[feature]['kwargs'])
+            selected_features = execute_feature_selection_method(feature_selection_methods[feature]['function'],
+                                                                 feature_selection_methods[feature]['kwargs'])
             if not selected_features:
                 selected_features = df2.columns.tolist()
                 error_txt = f'{feature} failed to generate a feature list, '
@@ -202,26 +202,26 @@ def preprocessing(data_path,
 
         return df1[selected_features], df2[selected_features]
 
-    df11, df21 = apply_fs(features,
-                          data_for_feature_selection,
-                          labeled_data,
-                          column_name + '_' + features + '_' + 'None' + '_' + 'None' + '_' + 'None' + '_Feat_M1'
-                          )
-    df12, df22 = apply_fs(features2,
-                          df11,
-                          df21,
-                          column_name + '_' + features + '_' + features2 + '_' + 'None' + '_' + 'None' + '_Feat_M2'
-                          )
-    df13, df23 = apply_fs(features3,
-                          df12,
-                          df22,
-                          column_name + '_' + features + '_' + features2 + '_' + features3 + '_' + 'None' + '_Feat_M3'
-                          )
-    df14, df24 = apply_fs(features4,
-                          df13,
-                          df23,
-                          column_name + '_' + features + '_' + features2 + '_' + features3 + '_' + features4 + '_Feat_M4'
-                          )
+    df11, df21 = apply_(features,
+                        data_for_feature_selection,
+                        labeled_data,
+                        column_name + '_' + features + '_' + 'None' + '_' + 'None' + '_' + 'None' + '_Feat_M1'
+                        )
+    df12, df22 = apply_(features2,
+                        df11,
+                        df21,
+                        column_name + '_' + features + '_' + features2 + '_' + 'None' + '_' + 'None' + '_Feat_M2'
+                        )
+    df13, df23 = apply_(features3,
+                        df12,
+                        df22,
+                        column_name + '_' + features + '_' + features2 + '_' + features3 + '_' + 'None' + '_Feat_M3'
+                        )
+    df14, df24 = apply_(features4,
+                        df13,
+                        df23,
+                        column_name + '_' + features + '_' + features2 + '_' + features3 + '_' + features4 + '_Feat_M4'
+                        )
 
     features_ = df14.columns
     df_labeled = labeled_data[features_]
@@ -284,5 +284,5 @@ def test_data_preprocessing(data_path,
         normalized_test_data = selected_test_data
     else:
         raise ValueError('Please provide a valid normalization method!')
-    normalized_test_data.to_csv(data_path+'normalized_test_data.csv')
+
     return model, normalized_test_data

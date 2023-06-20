@@ -234,7 +234,7 @@ def shap_(model, x_test, path, sampling_method, param_search, algorithm, col_lab
     else:
         raise ValueError("Unsupported model type")
 
-    with PdfPages(f"{p_name}_X_TEST_SHAP.pdf") as pdf:
+    with PdfPages(f"{p_name}_test_SHAP.pdf") as pdf:
         shap.summary_plot(shap_values, x_test, plot_type='layered_violin', color='#cccccc', show=False)
         plt.title('SHAP layered violin plot gray scale')
         plt.grid(None)
@@ -298,7 +298,7 @@ def lime_(model, x_test, path, sampling_method, param_search, algorithm, col_lab
     else:
         raise ValueError("Unsupported model type")
 
-    with PdfPages(f"{p_name}_X_TEST_LIME.pdf") as pdf:
+    with PdfPages(f"{p_name}_test_LIME.pdf") as pdf:
         for i in range(len(x_test)):
             if hasattr(model, 'predict_proba'):
                 prob_func = model.predict_proba
@@ -478,7 +478,7 @@ def get_data(data_path):
         if not is_connected():
             raise ValueError("No internet connection. Please connect to the internet and try again.")
 
-        url_ = "https://drive.google.com/uc?id=1RR26k1gcckinoqwxAPimPJRElpB3P84G&export=download&confirm=no_antivirus"
+        url_ = "https://drive.google.com/uc?id=1v9Bwe4TdXd-20SGKDBqUxwJp0Gzzdetl&export=download&confirm=no_antivirus"
         response = requests.get(url_)
 
         zip_filename = os.path.join(data_path, "data.zip")
@@ -494,7 +494,7 @@ def get_data(data_path):
     for file in csv_files:
         if not os.path.isfile(os.path.join(data_path, file)):
             raise ValueError(f"{file} is missing. Please download the zip file manually from "
-                             f"'https://drive.google.com/drive/folders/1RR26k1gcckinoqwxAPimPJRElpB3P84G?usp=sharing',"
+                             f"'https://drive.google.com/drive/folders/1v9Bwe4TdXd-20SGKDBqUxwJp0Gzzdetl?usp=sharing',"
                              f"unzip, and put the files in the alphaML_data folder.")
     logging.info("All files are available in the alphaML_data folder.")
     print("All files are available in the alphaML_data folder.")
@@ -795,7 +795,7 @@ def get_pred_data(data_path):
         if not is_connected():
             raise ValueError("No internet connection. Please connect to the internet and try again.")
 
-        url_ = "https://drive.google.com/uc?id=1oIwrDJCOdVLq650O_bV2RrvnEHb50Uzm&export=download&confirm=no_antivirus"
+        url_ = "https://drive.google.com/uc?id=1Ng5GeY_eLEILgojtnsLoaDCvs7cdApR5&export=download&confirm=no_antivirus"
         response = requests.get(url_)
 
         zip_filename = os.path.join(data_path, "predict.zip")
@@ -811,7 +811,7 @@ def get_pred_data(data_path):
     for file in csv_files:
         if not os.path.isfile(os.path.join(data_path, file)):
             raise ValueError(f"{file} is missing. Please download the zip file manually from "
-                             f"'https://drive.google.com/drive/folders/1oIwrDJCOdVLq650O_bV2RrvnEHb50Uzm?usp=sharing',"
+                             f"'https://drive.google.com/drive/folders/1Ng5GeY_eLEILgojtnsLoaDCvs7cdApR5?usp=sharing',"
                              f"unzip, and put the files in the alphaPred_data folder.")
     logging.info("All files are available in the alphaML_data folder.")
     print("All files are available in the alphaML_data folder.")

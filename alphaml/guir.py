@@ -467,7 +467,7 @@ c03r915_frame = tk.Frame(root, borderwidth=2, relief="groove")
 c03r915_frame.grid(row=9, column=0, columnspan=4, rowspan=10, padx=5, pady=5, sticky="w")
 
 # Add a label to the frame for the title
-c03r915_label = tk.Label(c03r915_frame, text="Data preprocessing", font=("Helvetica", 12, "bold"), fg="blue")
+c03r915_label = tk.Label(c03r915_frame, text="Feature selection", font=("Helvetica", 12, "bold"), fg="blue")
 c03r915_label.grid(row=0, column=0, columnspan=4, pady=5)
 # feature_label.config(width=50)
 
@@ -484,7 +484,7 @@ features_dropdown = tk.OptionMenu(c03r915_frame, features_var, *features_methods
 features_dropdown.grid(row=1, column=1, padx=5, pady=5)
 features_dropdown.config(width=18)  # Set the width of the widget
 
-features2_label = tk.Label(c03r915_frame, text="Method 2:", font=("Helvetica", 10, "bold"), anchor="e")
+features2_label = tk.Label(c03r915_frame, text="Method 2 (optional):", font=("Helvetica", 10, "bold"), anchor="e")
 features2_label.grid(row=2, column=0, padx=5, pady=5)
 features2_label.config(width=22)
 features2_methods = ['HVF', 'MedianMAD', 'SelByPCA', 'RandomProjection', 'SelByClustering', 'SelByNMF', 'SelectByRF',
@@ -495,7 +495,7 @@ features2_dropdown = tk.OptionMenu(c03r915_frame, features2_var, *features2_meth
 features2_dropdown.grid(row=2, column=1, padx=5, pady=5)
 features2_dropdown.config(width=18)  # Set the width of the widget
 
-features3_label = tk.Label(c03r915_frame, text="Method 3:", font=("Helvetica", 10, "bold"), anchor="e")
+features3_label = tk.Label(c03r915_frame, text="Method 3 (optional):", font=("Helvetica", 10, "bold"), anchor="e")
 features3_label.grid(row=3, column=0, padx=5, pady=5)
 features3_label.config(width=22)
 features3_methods = ['HVF', 'MedianMAD', 'SelByPCA', 'RandomProjection', 'SelByClustering', 'SelByNMF', 'SelectByRF',
@@ -506,7 +506,7 @@ features3_dropdown = tk.OptionMenu(c03r915_frame, features3_var, *features3_meth
 features3_dropdown.grid(row=3, column=1, padx=5, pady=5)
 features3_dropdown.config(width=18)  # Set the width of the widget
 
-features4_label = tk.Label(c03r915_frame, text="Method 4:", font=("Helvetica", 10, "bold"), anchor="e")
+features4_label = tk.Label(c03r915_frame, text="Method 4 (optional):", font=("Helvetica", 10, "bold"), anchor="e")
 features4_label.grid(row=4, column=0, padx=5, pady=5)
 features4_label.config(width=22)
 features4_methods = ['HVF', 'MedianMAD', 'SelByPCA', 'RandomProjection', 'SelByClustering', 'SelByNMF', 'SelectByRF',
@@ -553,7 +553,7 @@ n_components_entry = tk.Entry(c03r915_frame, textvariable=n_components_var)
 n_components_entry.config(width=22)  # Set the width of the widget
 n_components_entry.grid(row=8, column=1, padx=5, pady=5)
 
-min_sel_features_rfe_label = tk.Label(c03r915_frame, text="RFE Min features:", font=("Helvetica", 10, "bold"), anchor="e")
+min_sel_features_rfe_label = tk.Label(c03r915_frame, text="RFE min features:", font=("Helvetica", 10, "bold"), anchor="e")
 min_sel_features_rfe_label.config(width=22)
 min_sel_features_rfe_label.grid(row=9, column=0, padx=5, pady=5)
 min_sel_features_rfe_var = tk.IntVar(root)
@@ -574,7 +574,7 @@ flavor_dropdown = tk.OptionMenu(c03r915_frame, flavor_var, *flavor_methods)
 flavor_dropdown.config(width=18)
 flavor_dropdown.grid(row=1, column=3, padx=5, pady=5)
 
-topgenes_label = tk.Label(c03r915_frame, text="HVF Top features:", font=("Helvetica", 10, "bold"), anchor="e")
+topgenes_label = tk.Label(c03r915_frame, text="HVF top features:", font=("Helvetica", 10, "bold"), anchor="e")
 topgenes_label.config(width=22)
 topgenes_label.grid(row=2, column=2, padx=5, pady=5)
 topgenes_var = tk.IntVar(root)
@@ -583,7 +583,7 @@ topgenes_entry = tk.Entry(c03r915_frame, textvariable=topgenes_var)
 topgenes_entry.config(width=22)  # Set the width of the widget
 topgenes_entry.grid(row=2, column=3, padx=5, pady=5)
 
-disp_label = tk.Label(c03r915_frame, text="HVG Min dispersion:", font=("Helvetica", 10, "bold"), anchor="e")
+disp_label = tk.Label(c03r915_frame, text="HVG min dispersion:", font=("Helvetica", 10, "bold"), anchor="e")
 disp_label.config(width=22)
 disp_label.grid(row=3, column=2, padx=5, pady=5)
 disp_var = tk.DoubleVar(root)
@@ -593,7 +593,7 @@ disp_entry.config(width=22)  # Set the width of the widget
 disp_entry.grid(row=3, column=3, padx=5, pady=5)
 
 
-max_features_label = tk.Label(c03r915_frame, text="RF Maximum features:", font=("Helvetica", 10, "bold"), anchor="e")
+max_features_label = tk.Label(c03r915_frame, text="RF maximum features:", font=("Helvetica", 10, "bold"), anchor="e")
 max_features_label.config(width=22)
 max_features_label.grid(row=4, column=2, padx=5, pady=5)
 max_features_var = tk.IntVar(root)
@@ -602,7 +602,7 @@ max_features_entry = tk.Entry(c03r915_frame, textvariable=max_features_var)
 max_features_entry.config(width=22)  # Set the width of the widget
 max_features_entry.grid(row=4, column=3, padx=9, pady=5)
 
-threshold_label = tk.Label(c03r915_frame, text="RF Threshold(mean/median):", font=("Helvetica", 9, "bold"), anchor="e")
+threshold_label = tk.Label(c03r915_frame, text="RF threshold(mean/median):", font=("Helvetica", 9, "bold"), anchor="e")
 threshold_label.config(width=25)
 threshold_label.grid(row=5, column=2, padx=5, pady=5)
 threshold_var = tk.StringVar(root)
@@ -612,7 +612,7 @@ threshold_entry.config(width=22)  # Set the width of the widget
 threshold_entry.grid(row=5, column=3, padx=9, pady=5)
 
 # params_label.config(width=50)
-min_sel_features_label = tk.Label(c03r915_frame, text="ModelX Min feature:", font=("Helvetica", 10, "bold"),
+min_sel_features_label = tk.Label(c03r915_frame, text="ModelX min feature:", font=("Helvetica", 10, "bold"),
                                   anchor="e")
 min_sel_features_label.config(width=22)
 min_sel_features_label.grid(row=6, column=2, padx=12, pady=5)
@@ -622,7 +622,7 @@ min_sel_features_entry = tk.Entry(c03r915_frame, textvariable=min_sel_features_v
 min_sel_features_entry.config(width=22)  # Set the width of the widget
 min_sel_features_entry.grid(row=6, column=3, padx=9, pady=5)
 
-latent_dim_label = tk.Label(c03r915_frame, text="ModelX Latent dimensions:", font=("Helvetica", 10, "bold"), anchor="e")
+latent_dim_label = tk.Label(c03r915_frame, text="ModelX latent dimensions:", font=("Helvetica", 10, "bold"), anchor="e")
 latent_dim_label.config(width=22)
 latent_dim_label.grid(row=7, column=2, padx=5, pady=5)
 latent_dim_var = tk.IntVar(root)
@@ -640,7 +640,7 @@ fdr_entry = tk.Entry(c03r915_frame, textvariable=fdr_var)
 fdr_entry.config(width=22)  # Set the width of the widget
 fdr_entry.grid(row=8, column=3, padx=9, pady=5)
 
-min_sel_features_sfs_label = tk.Label(c03r915_frame, text="SFS Min features:", font=("Helvetica", 10, "bold"), anchor="e")
+min_sel_features_sfs_label = tk.Label(c03r915_frame, text="SFS min features:", font=("Helvetica", 10, "bold"), anchor="e")
 min_sel_features_sfs_label.config(width=22)
 min_sel_features_sfs_label.grid(row=9, column=2, padx=5, pady=3)
 min_sel_features_sfs_var = tk.IntVar(root)

@@ -50,10 +50,10 @@ def aml(model_name='XGBoost',
     result_path = os.path.join(user_documents, "alphaML_results/")
     if not os.path.exists(result_path):
         os.makedirs(result_path)
-
+    f_name = col_label + '_' + sampling_method + '_' + param_search + '_' + model_name + '_fit_' + control_fitting
     # Set the log level (DEBUG, INFO, WARNING, ERROR, or CRITICAL)
     log_level = logging.INFO
-    log_file_path = os.path.abspath(result_path + "alphaML_run.log")
+    log_file_path = os.path.abspath(result_path + f"{f_name}_alphaML_run.log")
     # Configure logging settings
     logging.basicConfig(filename=log_file_path,
                         level=log_level,

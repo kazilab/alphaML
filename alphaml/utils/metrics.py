@@ -218,9 +218,9 @@ class BinaryClassificationLosses:
 
 
 def kappa_mcc_error(y_true, y_pred):
-    kappa = 1 - cohen_kappa_score(y_true, y_pred)
-    mcc = 1 - matthews_corrcoef(y_true, y_pred)
-    return (kappa*mcc)**0.5
+    k = cohen_kappa_score(y_true, y_pred)
+    m = matthews_corrcoef(y_true, y_pred)
+    return 1 - (k*m)**0.5
 
 # Make a custom scorer to use for optimization considering test and train scores
 
@@ -229,11 +229,14 @@ def custom_score(model, x_train, y_train, x_test, y_test):
     train_pred = model.predict(x_train)
     test_pred = model.predict(x_test)
 
-    train_score = kappa_mcc_error(y_train, train_pred)
-    test_score = kappa_mcc_error(y_test, test_pred)
-    diff = ((train_score - test_score)**2)**0.5
-    
-    return (diff*test_score)**0.5
+    train_error = kappa_mcc_error(y_train, train_pred)
+    test_error = kappa_mcc_error(y_test, test_pred)
+    diff = ((train_error - test_error)**2)**0.5
+    if train_error == test_error:
+        cs = test_error
+    else:
+        cs = (diff*test_error)**0.5
+    return cs
 
 # ***************** Confusion Matrix by SKLEARN **********************************
 
@@ -315,7 +318,7 @@ def neglog2rmsl(model, x_train, y_train, x_test, y_test):
     # Calculate RMS of test scores losses
     loss_ = np.mean(np.mean(np.square(losses_df.drop(drop_metrics)), axis=1)) ** 0.5
     # Calculate final scores by taking geometric mean, and then making negative log2
-    factor = -1 * np.log2((diff * loss_) ** 0.5)
+    factor = -1 * np.log2(((diff+0.05) * loss_) ** 0.5)
     all_score_df = pd.concat([train_df, test_df, losses_df], axis=1).round(decimals=3)
     all_score_df.loc['NegLog2-RMSL'] = factor  # Negative log2 Root Mean Squared Loss
     return all_score_df, factor

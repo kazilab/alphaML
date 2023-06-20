@@ -17,7 +17,7 @@ if not (sys.version_info[0] == 3 and sys.version_info[1] >= 9):
 # main setup command
 setup(
       name='alphaml',
-      version='0.1.1', # Major.Minor.Patch
+      version='0.1.2', # Major.Minor.Patch
       author='Julhash Kazi',
       author_email='aml@kazilab.se',
       url='https://www.kazilab.se',

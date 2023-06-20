@@ -28,7 +28,8 @@ def pred(normalization='min_max',
                         level=log_level,
                         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    model, test_data = test_data_preprocessing(data_path=data_path, normalization=normalization)
+    model, test_data = test_data_preprocessing(data_path=data_path,
+                                               normalization=normalization)
     test_data.index.name = 'IndexName'
     algorithm = model.__class__.__name__
     path = result_path
@@ -36,6 +37,7 @@ def pred(normalization='min_max',
     param_search = ''
     control_fitting = ''
     p_name = path + col_label + '_' + sampling_method + '_' + param_search + '_' + algorithm + '_fit_' + control_fitting
+    test_data.to_csv(p_name + 'normalized_test_data.csv')
     test_data_pred = model.predict(test_data.to_numpy())
     test_data_proba = model.predict_proba(test_data.to_numpy())[:, 1] if hasattr(model, "predict_proba") else None
     test_data_pred_df = pd.DataFrame(test_data_pred, columns=['predictions'])
@@ -65,7 +67,9 @@ def pred(normalization='min_max',
               col_label=col_label,
               control_fitting=control_fitting
               )
-    elif run_lime == 'Yes':
+    else:
+        pass
+    if run_lime == 'Yes':
         lime_(model=model,
               x_test=test_data,
               path=result_path,
