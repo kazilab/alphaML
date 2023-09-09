@@ -42,7 +42,7 @@ class BinaryClassificationMetrics:
     def sensitivity_test(self):  # 3 Sensitivity or Recall or True positive rate (TPR) or Detection Rate (DR)
         return self.tp/(self.tp+self.fn)
 
-    def fnr_test(self):  # 3-1 False negative rate (FNR), False omission rate (FOR), equal to (1-sensitivity)
+    def fnr_test(self):  # 3-1 False negative rate (FNR), equal to (1-sensitivity)
         return self.fn/(self.fn+self.tp)
         
     def specificity_test(self):  # 4 Specificity
