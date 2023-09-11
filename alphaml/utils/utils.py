@@ -59,6 +59,35 @@ def ext(data_path):
         sep = '\t'
     return sep
 
+# remove NaN
+
+
+def preprocessing_df(df):
+    """
+    Prepare df to use as data.
+    Args:
+        df: data to be processed.
+
+    Returns:
+        df_clean: same as original dataframe with NaN values replaced by 0
+
+    """
+    if not isinstance(df, pd.DataFrame):
+        raise TypeError('df must be a pandas DataFrame')
+
+    df_pre_imputed = df.copy()
+    # Define a possible list of missing value indicators including the list from pandas
+    missing_value_indicators = ['NAN', 'Nan', 'NA#', '#VALUE!', '#DIV/0!', '-', '_', '--', '---', '__', '___',
+                                '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN', '-NaN', '-nan', '1.#IND',
+                                '1.#QNAN', '<NA>', 'N/A', 'NA', 'NULL', 'NaN', 'None', 'n/a', 'nan', 'null',
+                                '#NUM!']
+
+    # Replace all missing value indicators with np.nan, update the df inplace
+    df_pre_imputed.replace(missing_value_indicators, np.nan, inplace=True)
+
+    data = df_pre_imputed.fillna(0)
+    return data
+  
 # Highly variable features adapted from scanpy.preprocessing._highly_variable_genes._highly_variable_genes_single_batch
 
 
