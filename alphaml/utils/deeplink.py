@@ -206,8 +206,8 @@ class DeepLink(tf.keras.Model):
             self.out_feature = []
 
 
-def get_features(self):
-    return self.out_feature
+    def get_features(self):
+        return self.out_feature
 
 
 # To run model ##
