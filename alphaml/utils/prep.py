@@ -7,7 +7,7 @@ from .utils import (hvf, select_from_rf, min_max, standardize_dataframe, get_dat
                     recursive_feature_elimination, seq_feat_sel, get_pred_data,
                     select_by_mad, select_by_pca, select_by_random_projection,
                     select_by_clustering, select_by_nmf, iterative_feature_selector,
-                    remove_highly_correlated_feat)
+                    remove_highly_correlated_feat, preprocessing_df)
 
 
 warnings.filterwarnings("ignore")
@@ -87,18 +87,21 @@ def preprocessing(data_path,
                                sep=',',
                                low_memory=False
                                )
+    labeled_data = preprocessing_df(labeled_data)
     unlabeled_data = pd.read_csv(data_path+'unlabeled_data.csv',
                                  index_col=0,
                                  header=0,
                                  sep=',',
                                  low_memory=False
                                  )
+    unlabeled_data = preprocessing_df(unlabeled_data)
     data_for_feature_selection = pd.read_csv(data_path+'data_for_feature_selection.csv',
                                              index_col=0,
                                              header=0,
                                              sep=',',
                                              low_memory=False
                                              )
+    data_for_feature_selection = preprocessing_df(data_for_feature_selection)
     # Encode labels
     pos_class = pos_class.strip().lower()
     neg_class = neg_class.strip().lower()
