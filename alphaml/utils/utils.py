@@ -507,10 +507,12 @@ def get_data(data_path):
         if not is_connected():
             raise ValueError("No internet connection. Please connect to the internet and try again.")
 
-        url_ = "https://drive.google.com/uc?id=1v9Bwe4TdXd-20SGKDBqUxwJp0Gzzdetl&export=download&confirm=no_antivirus"
+        # url_ = "https://drive.google.com/uc?id=1v9Bwe4TdXd-20SGKDBqUxwJp0Gzzdetl&export=download&confirm=no_antivirus"
+        url_ = "https://figshare.com/ndownloader/files/42323292"
         response = requests.get(url_)
 
-        zip_filename = os.path.join(data_path, "data.zip")
+        # zip_filename = os.path.join(data_path, "data.zip")  
+        zip_filename = os.path.join(data_path, "example_data_model.zip")
         with open(zip_filename, "wb") as zip_file:
             zip_file.write(response.content)
 
@@ -524,6 +526,7 @@ def get_data(data_path):
         if not os.path.isfile(os.path.join(data_path, file)):
             raise ValueError(f"{file} is missing. Please download the zip file manually from "
                              f"'https://drive.google.com/drive/folders/1v9Bwe4TdXd-20SGKDBqUxwJp0Gzzdetl?usp=sharing',"
+                             f"or 'https://figshare.com/ndownloader/files/42323292',"
                              f"unzip, and put the files in the alphaML_data folder.")
     logging.info("All files are available in the alphaML_data folder.")
     print("All files are available in the alphaML_data folder.")
@@ -824,10 +827,11 @@ def get_pred_data(data_path):
         if not is_connected():
             raise ValueError("No internet connection. Please connect to the internet and try again.")
 
-        url_ = "https://drive.google.com/uc?id=1Ng5GeY_eLEILgojtnsLoaDCvs7cdApR5&export=download&confirm=no_antivirus"
+        # url_ = "https://drive.google.com/uc?id=1Ng5GeY_eLEILgojtnsLoaDCvs7cdApR5&export=download&confirm=no_antivirus"
+        url_ = "https://figshare.com/ndownloader/files/42323295"
         response = requests.get(url_)
 
-        zip_filename = os.path.join(data_path, "predict.zip")
+        zip_filename = os.path.join(data_path, "example_data_prediction.zip")
         with open(zip_filename, "wb") as zip_file:
             zip_file.write(response.content)
 
@@ -841,6 +845,7 @@ def get_pred_data(data_path):
         if not os.path.isfile(os.path.join(data_path, file)):
             raise ValueError(f"{file} is missing. Please download the zip file manually from "
                              f"'https://drive.google.com/drive/folders/1Ng5GeY_eLEILgojtnsLoaDCvs7cdApR5?usp=sharing',"
+                             f" or 'https://figshare.com/ndownloader/files/42323295',"
                              f"unzip, and put the files in the alphaPred_data folder.")
     logging.info("All files are available in the alphaML_data folder.")
     print("All files are available in the alphaML_data folder.")
