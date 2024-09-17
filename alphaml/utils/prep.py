@@ -281,8 +281,8 @@ def test_data_preprocessing(data_path,
         # Normalize data using min-max normalization between 0 and 1.
         normalized_test_data = min_max(selected_test_data.T).T
     elif normalization == 'standardization':
-        # Normalize data using min-max normalization between 0 and 1.
-        normalized_test_data = standardize_dataframe(selected_test_data.T).T
+        # Normalize data using stand scalar sum 0 and STDEV 1.
+        normalized_test_data = standardize_dataframe(selected_test_data)
     elif normalization == 'None':
         normalized_test_data = selected_test_data
     else:
