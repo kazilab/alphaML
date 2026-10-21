@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+# Shell scripts and the Dockerfile run in Linux: always LF
+*.sh text eol=lf
+Dockerfile text eol=lf
+*.cmd text eol=crlf
