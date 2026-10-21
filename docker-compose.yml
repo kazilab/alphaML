@@ -1,0 +1,43 @@
+# alphaML 2.0 at http://localhost:8765
+#   start:  docker compose up -d --build
+#   stop:   docker compose down
+# Uploaded data sets and all job results are stored in the tmp folder next to this file
+# (e.g. E:\alphaML\tmp); set ALPHAML_DATA_DIR to use another folder.
+services:
+  alphaml:
+    build: .
+    image: alphaml:2.0
+    container_name: alphaml
+    ports:
+      - "127.0.0.1:${ALPHAML_PORT:-8765}:8000"   # reachable from this computer only
+    volumes:
+      - "${ALPHAML_DATA_DIR:-./tmp}:/data"
+    environment:
+      # Accounts: everyone logs in and sees only their own data sets and results
+      ALPHAML_AUTH: "${ALPHAML_AUTH:-1}"
+      # Data sets and results are deleted this many days after upload/submission (0 = keep)
+      ALPHAML_RETENTION_DAYS: "${ALPHAML_RETENTION_DAYS:-14}"
+      ALPHAML_SIGNUP_CODE: "${ALPHAML_SIGNUP_CODE:-}"       # if set, needed to create an account
+      ALPHAML_ALLOW_SIGNUP: "${ALPHAML_ALLOW_SIGNUP:-1}"    # 0: only the admin creates accounts
+      ALPHAML_MAX_JOBS_PER_USER: "${ALPHAML_MAX_JOBS_PER_USER:-3}"
+      # Host names browsers use to reach the server; add yours when serving it under a domain name
+      ALPHAML_ALLOWED_HOSTS: "${ALPHAML_ALLOWED_HOSTS:-localhost,127.0.0.1}"
+      ALPHAML_COOKIE_SECURE: "${ALPHAML_COOKIE_SECURE:-0}"  # 1 when served over HTTPS
+      # Header with the visitor's address when behind a proxy or tunnel (CF-Connecting-IP for Cloudflare)
+      ALPHAML_CLIENT_IP_HEADER: "${ALPHAML_CLIENT_IP_HEADER:-}"
+      # Password reset by email: SMTP settings from the git-ignored .env file (see .env.example)
+      ALPHAML_SMTP_HOST: "${ALPHAML_SMTP_HOST:-}"
+      ALPHAML_SMTP_PORT: "${ALPHAML_SMTP_PORT:-587}"
+      ALPHAML_SMTP_SECURITY: "${ALPHAML_SMTP_SECURITY:-starttls}"
+      ALPHAML_SMTP_USERNAME: "${ALPHAML_SMTP_USERNAME:-}"
+      ALPHAML_SMTP_PASSWORD: "${ALPHAML_SMTP_PASSWORD:-}"
+      ALPHAML_SMTP_FROM: "${ALPHAML_SMTP_FROM:-}"
+      ALPHAML_PUBLIC_URL: "${ALPHAML_PUBLIC_URL:-}"
+      # Shown in the privacy notice (GDPR): who runs this server and how to contact them about personal data
+      ALPHAML_OPERATOR: "${ALPHAML_OPERATOR:-}"
+      ALPHAML_PRIVACY_CONTACT: "${ALPHAML_PRIVACY_CONTACT:-}"
+      ALPHAML_MAX_JOBS: "${ALPHAML_MAX_JOBS:-1}"
+      ALPHAML_MAX_UPLOAD_MB: "${ALPHAML_MAX_UPLOAD_MB:-2048}"
+      ALPHAML_THREADS: "${ALPHAML_THREADS:-}"   # threads per model fit (empty: up to 16)
+    stop_grace_period: 30s
+    restart: unless-stopped
