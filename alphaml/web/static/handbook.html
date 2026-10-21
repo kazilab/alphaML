@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The alphaML 2.0 user handbook: input files, feature selection, AutoML, results, prediction, privacy and scientific limitations.">
+  <meta name="theme-color" content="#2456c9">
+  <title>alphaML 2.0 · User handbook</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="handbook.css">
+  <script src="handbook.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to handbook</a>
+  <header class="book-header">
+    <a class="book-brand" href="/#/train"><span class="brand-mark" aria-hidden="true">α</span> alphaML <small>2.0 / USER HANDBOOK</small></a>
+    <nav aria-label="Handbook actions"><a href="/#/train">Open application ↗</a><a href="/#/privacy">Privacy notice</a><button type="button" id="print-handbook" hidden>Print / save PDF</button></nav>
+  </header>
+  <div class="book-layout">
+    <aside class="contents"><nav aria-label="Handbook contents">
+      <p class="eyebrow">ON THIS PAGE</p>
+      <ol>
+        <li><a href="#start">Your first analysis</a></li>
+        <li><a href="#scope">What alphaML can and cannot do</a></li>
+        <li><a href="#input">Prepare input files</a></li>
+        <li><a href="#examples">Download synthetic examples</a></li>
+        <li><a href="#preprocessing">Labels and normalization</a></li>
+        <li><a href="#selection">Feature selection</a></li>
+        <li><a href="#models">Models and settings</a></li>
+        <li><a href="#jobs">Follow a job</a></li>
+        <li><a href="#scores">Read scores and the leaderboard</a></li>
+        <li><a href="#explanations">Understand explanations</a></li>
+        <li><a href="#prediction">Predict new samples</a></li>
+        <li><a href="#downloads">Save results and models</a></li>
+        <li><a href="#limits">Scientific and practical limits</a></li>
+        <li><a href="#accounts">Accounts and privacy</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+        <li><a href="#glossary">Glossary and support</a></li>
+      </ol>
+    </nav></aside>
+    <main id="content">
+      <div class="hero">
+        <p class="eyebrow">FROM TABULAR DATA TO EXPLAINABLE CLASSIFICATION</p>
+        <h1>Using alphaML.</h1>
+        <p class="lead">A practical guide to the alphaML 2.0 research workbench.</p>
+        <p class="edition">Application 0.2.0 · Updated 19 October 2026</p>
+        <div class="summary-grid"><div><strong>Bring</strong><span>Numeric features and a separate labels table.</span></div><div><strong>Build</strong><span>A model distinguishing two chosen classes.</span></div><div><strong>Review</strong><span>Scores, explanations and new predictions.</span></div></div>
+        <p class="small" id="configuration-status">Default server settings are shown below. Check the application and privacy notice for the settings of your server.</p>
+      </div>
+
+      <section id="start">
+        <p class="section-number">01</p><h2>Your first analysis</h2>
+        <p>alphaML is an AutoML application for <strong>binary classification</strong>: predicting one of two labels from numeric features. It was developed for research, including pharmacogenomic expression data. CLETE stands for Clear, Legible, Explainable, Transparent and Elucidative; explanation plots help inspect a model, but do not establish that it is scientifically valid.</p>
+        <ol class="workflow"><li><b>Sign in</b><span>Read the privacy notice.</span></li><li><b>Upload</b><span>Features and labels.</span></li><li><b>Configure</b><span>Classes, selection and model.</span></li><li><b>Review</b><span>Job results and limitations.</span></li><li><b>Predict</b><span>Apply the saved model.</span></li></ol>
+        <h3>A small, reproducible first run</h3>
+        <ol>
+          <li>Download <a href="#examples">the synthetic example files</a>. Open <strong>Train → Upload new…</strong>, give the data set a name, and upload <code>example_labeled_data.csv</code> as <strong>Labeled data</strong> and <code>example_data_labels.csv</code> as <strong>Labels</strong>. Leave optional files empty and select <strong>Upload</strong>.</li>
+          <li>Set <strong>Class column = response</strong>, <strong>Positive class = resistant</strong>, and <strong>Negative class = sensitive</strong>.</li>
+          <li>Set all four <strong>Feature selection</strong> methods to <strong>None</strong>. Select <strong>Single algorithm → Ridge → Predefined</strong>. Set <strong>Normalization = None</strong>, <strong>Sampling = None</strong>, <strong>Test size = 0.2</strong>, and <strong>Random seed = 12</strong>. Leave explanation options off for this first run.</li>
+          <li>Select <strong>Start training</strong>. On <strong>Jobs</strong>, wait for success and inspect the scores, confusion matrix and files. The 120-row example produces 96 training and 24 test rows with this setup.</li>
+          <li>Open <strong>Predict</strong>, choose that finished training job, and upload <code>example_new_samples.csv</code>. Keep <strong>Same as the model</strong> and leave class-name overrides blank. Select <strong>Start prediction</strong>, then download the prediction spreadsheet.</li>
+        </ol>
+        <p>This recipe checks the file-to-model workflow; its settings and scores are not a recommendation for your study. To explore AutoML with the same data, try only <strong>LASSO</strong> and <strong>RandomForest</strong>, tune <strong>2</strong> algorithms with <strong>2</strong> trials each and <strong>3</strong> CV folds, and keep explanations off initially.</p>
+        <p><strong>Load example data</strong> in the app is a separate, shared pharmacogenomic example downloaded from figshare. It needs internet access the first time. The synthetic downloads in this handbook work without that external download.</p>
+      </section>
+
+      <section id="scope">
+        <p class="section-number">02</p><h2>What alphaML can and cannot do</h2>
+        <div class="table-wrap"><table><caption>Scope of this web application</caption><thead><tr><th>It can</th><th>It does not currently provide</th></tr></thead><tbody>
+          <tr><td>Classify numeric tabular samples into two selected classes.</td><td>Regression, multiclass/multilabel prediction, survival models or time-series forecasting workflows.</td></tr>
+          <tr><td>Apply up to four feature-selection methods, in sequence.</td><td>Native categorical/text/image predictors, automatic batch correction or a complete assay preprocessing pipeline.</td></tr>
+          <tr><td>Compare algorithms with AutoML, tune candidates and try a probability-averaging ensemble.</td><td>A guarantee of the globally best model, calibrated probabilities, or an unbiased estimate from an exhaustive nested validation pipeline.</td></tr>
+          <tr><td>Provide test metrics, selected features, optional importance/SHAP/LIME plots and repeated-CV ROC plots.</td><td>Causal effects, proof of a biological mechanism, clinical validation or regulatory approval.</td></tr>
+          <tr><td>Save model bundles and predict new samples in background jobs.</td><td>Automatic retraining, drift monitoring, a threshold editor, or a browser control to refit the final model on all labeled rows.</td></tr>
+        </tbody></table></div>
+        <p>Options available through the Python API are not necessarily exposed in the web interface. For example, the combinatorial <code>IterativeFeatSel</code> method is not offered in the browser.</p>
+      </section>
+
+      <section id="input">
+        <p class="section-number">03</p><h2>Prepare input files</h2>
+        <p>Training requires <strong>two separate tables</strong>. Use UTF-8 CSV, or tab-separated <code>.tsv</code>/<code>.txt</code>, with a header row. <strong>The first column contains sample names and is read as the row index</strong>, never as a predictor. Samples go down rows and features go across columns. Export Excel sheets as CSV first; <code>.xlsx</code> is a result format, not an accepted input format.</p>
+        <div class="table-wrap"><table><caption>Files accepted by Train → Upload new…</caption><thead><tr><th>Upload field</th><th>Required?</th><th>Contents</th></tr></thead><tbody>
+          <tr><td>Labeled data</td><td>Yes</td><td>First column: sample code. Remaining columns: numeric features such as gene measurements. Do not include the target among these features.</td></tr>
+          <tr><td>Labels</td><td>Yes</td><td>First column: matching sample code. Remaining columns: possible outcomes, such as a drug response. Select one outcome and two class values in the app.</td></tr>
+          <tr><td>Data for feature selection</td><td>No</td><td>A numeric sample × feature table for unsupervised selection. Without it, those methods use the labeled table. Supervised methods still use the labeled data and its classes.</td></tr>
+          <tr><td>Unlabeled data</td><td>No</td><td>Numeric features for additional samples. Predictions are generated after training; this table does not supply validation labels.</td></tr>
+          <tr><td>Suggested features</td><td>No</td><td>A single column of feature names with a header. Select <strong>Suggested</strong> as a feature-selection method to use the list. This file has no sample-index column.</td></tr>
+        </tbody></table></div>
+        <div class="example-pair"><div><h3>Labeled data</h3><pre><code>sample,GENE01,GENE02,GENE03
+S001,3.12,4.81,2.67
+S002,4.76,2.15,3.09</code></pre></div><div><h3>Labels</h3><pre><code>sample,response
+S001,resistant
+S002,sensitive</code></pre></div></div>
+        <p class="small">This miniature preview illustrates layout only. Use the full downloadable examples for a runnable first analysis.</p>
+        <h3>Before uploading</h3>
+        <ul>
+          <li>Use unique, non-empty sample codes and feature names. Prefer simple sample codes without commas, tabs or embedded newlines. Keep sample codes as text and preserve their spelling and leading zeros in every file.</li>
+          <li>Check that the sample codes in the labels match the feature table. Review the app’s matched-label count before training. Identical row order alone is a fragile way to link separate files.</li>
+          <li>All predictor columns must represent numeric quantities. Encode categorical variables deliberately outside alphaML if appropriate; it does not infer categories or one-hot encode them. Use a decimal point, no unit suffixes, percent signs or thousands separators, and no infinite values.</li>
+          <li>Check missing values explicitly. The numeric file reader replaces missing values and nonnumeric text with <strong>zero</strong>; it does not learn medians or report a missingness audit. A misspelled measurement can therefore become an apparently valid zero.</li>
+          <li>Keep units, preprocessing, assay platform and feature naming compatible between training and prediction. alphaML does not perform RNA-seq count normalization, batch correction or cross-platform harmonization for you.</li>
+          <li>Remove target-derived variables, post-outcome information and identifiers encoding the answer. Only upload anonymised data allowed by the server’s privacy notice.</li>
+        </ul>
+        <div class="callout"><strong>Feature overlap affects the model.</strong> During training, the application intersects feature columns across labeled data, optional feature-selection data and optional unlabeled data. Features missing from another supplied matrix are dropped before selection. Check the log and <code>selected_features.csv</code>; supplying an incomplete optional table can change the model.</div>
+      </section>
+
+      <section id="examples">
+        <p class="section-number">04</p><h2>Download synthetic examples</h2>
+        <p>These files contain no real people or patient data. The two training tables share 120 sample codes and 16 numeric features; the new-samples table contains 16 independent samples, reordered feature columns and no labels.</p>
+        <div class="download-grid">
+          <a class="download" href="example_labeled_data.csv" download><b>Labeled data CSV ↓</b><span>120 samples × 16 features</span></a>
+          <a class="download" href="example_data_labels.csv" download><b>Labels CSV ↓</b><span>response: resistant / sensitive</span></a>
+          <a class="download" href="example_new_samples.csv" download><b>New samples CSV ↓</b><span>16 samples · same 16 features</span></a>
+          <a class="download" href="example_suggested_features.csv" download><b>Suggested features CSV ↓</b><span>Optional four-feature list</span></a>
+        </div>
+        <p>Use the <a href="#start">first-run recipe</a> with all features. To try the feature list, upload the suggested-features CSV in its optional field and choose <strong>Suggested</strong> for Method 1, with the other methods <strong>None</strong>. Uploading the file by itself does not activate that method.</p>
+        <p>The values are synthetic log2-scale expression-like measurements. If exploring <strong>HVF</strong>, its data-transform setting is <strong>log2(x+1)</strong> for this example; that setting describes the input scale rather than requesting an additional log transform.</p>
+      </section>
+
+      <section id="preprocessing">
+        <p class="section-number">05</p><h2>Labels and normalization</h2>
+        <h3>Choose the meaning of positive and negative</h3>
+        <p>Select one <strong>Class column</strong>, then two different class values. Positive is encoded as <strong>1</strong>, negative as <strong>0</strong>. Matching trims spaces and ignores class-label case. Other values, including unknown labels, are excluded from this run; choosing two classes from a larger label column still produces a binary model. The web app offers label columns containing between 2 and 50 distinct non-missing values.</p>
+        <p>Samples are aligned by their sample names. If there are no matching sample names and both files have the same number of rows, alphaML falls back to <strong>row-order matching</strong> and records this in the log. If only some names match, it uses those matches and drops unmatched samples. Verify the log, retained sample count and class counts; a row-order fallback can silently assign the wrong labels if files are ordered differently.</p>
+        <h3>Normalization acts across features within each sample</h3>
+        <div class="table-wrap"><table><caption>Normalization choices, applied after feature selection</caption><thead><tr><th>Choice</th><th>What happens</th><th>When to think carefully</th></tr></thead><tbody>
+          <tr><td>Min-max per sample (<code>min_max</code>, default)</td><td>Each row is rescaled between its own minimum and maximum.</td><td>Absolute level differences between samples are removed. This may be unsuitable when a sample’s overall level carries information.</td></tr>
+          <tr><td>Standardize per sample (<code>standardization</code>)</td><td>Each row is centered at its own mean and divided by its population standard deviation.</td><td>This is not column-wise feature standardization learned on training samples.</td></tr>
+          <tr><td>None</td><td>Keeps numeric input values after the file reader’s zero filling.</td><td>You must provide a scientifically appropriate and consistent scale yourself.</td></tr>
+        </tbody></table></div>
+        <p>A constant row becomes all zeros under min-max or standardization. With only one selected feature, both methods turn every sample into zero, so use <strong>None</strong> for a one-feature analysis. Predicting one sample or a batch uses the same row-wise rule and the saved feature order.</p>
+      </section>
+
+      <section id="selection">
+        <p class="section-number">06</p><h2>Feature selection</h2>
+        <p>Up to four methods run in order, each on the features retained by the preceding method. <strong>None</strong> keeps the current set. Additional steps do not necessarily improve performance, and the order can change the result. Most computed selectors log a fallback to the current set if they return no features; an empty <strong>Suggested</strong> match can instead make the run fail. Inspect the output rather than assuming the requested reduction happened.</p>
+        <div class="table-wrap"><table><caption>Methods offered in the browser</caption><thead><tr><th>Method</th><th>Purpose and key settings</th></tr></thead><tbody>
+          <tr><td>HVF</td><td>Selects highly variable features using dispersion within mean bins. Choose the input’s actual <code>log2(x+1)</code>, <code>log10(x+1)</code>, <code>ln(x+1)</code> or non-log scale. It reverses that transform to calculate dispersion; it does not log-transform the model input. Top features ≥2 uses a ranked cut-off; 0 uses the dispersion/mean cut-offs. Ties can retain more than the requested number.</td></tr>
+          <tr><td>MedianMAD</td><td>Keeps features with median absolute deviation above the median across features. No count setting; constant or tied-dispersion data may retain no new subset.</td></tr>
+          <tr><td>SelByPCA</td><td>Ranks original features by aggregated loadings from components covering about 80% of variance. Set top features. The classifier receives selected original features, not PCA component scores.</td></tr>
+          <tr><td>RandomProjection</td><td>Ranks original features by their association with a seeded random projection. Set top features; this is not a classifier operating directly on projection coordinates.</td></tr>
+          <tr><td>SelByClustering</td><td>Clusters feature profiles and chooses representative features. Set a number of clusters compatible with the available feature count.</td></tr>
+          <tr><td>SelByNMF</td><td>Selects features using non-negative matrix factorization. Requires non-negative input and a feasible number of components.</td></tr>
+          <tr><td>SelectByRF</td><td>A supervised random-forest selector. Set an importance threshold such as <code>1.5*mean</code> and an optional maximum feature count; 0 means no count limit.</td></tr>
+          <tr><td>RecursiveFeatElim</td><td>Supervised recursive elimination with a linear SVM and internal CV. Set minimum retained features. Removing features one at a time can be expensive.</td></tr>
+          <tr><td>SeqFeatSel</td><td>Supervised sequential selection with XGBoost and internal CV. Set the retained feature count; use only after a substantial reduction for wide data.</td></tr>
+          <tr><td>RemoveHighCorrFeat</td><td>Greedily removes a feature if its absolute correlation with an earlier retained feature is at least 0.9. Column order affects which feature survives.</td></tr>
+          <tr><td>Suggested</td><td>Keeps names from the supplied one-column list that exist in the current data. Missing names are logged. A list fixed independently of the study labels can help define a prespecified panel.</td></tr>
+          <tr><td>None</td><td>Keeps all current features. Useful for a known panel and for testing the input workflow.</td></tr>
+        </tbody></table></div>
+        <div class="callout caution"><strong>Feature selection is not nested within evaluation.</strong> Selection currently runs on the labeled data before the train/test split and before the model-selection CV folds. In particular, supervised selection can use labels from rows later called “test.” Test and CV scores can therefore be optimistic. See <a href="#limits">validation limits</a> before using these scores in a manuscript or to support a decision.</div>
+      </section>
+
+      <section id="models">
+        <p class="section-number">07</p><h2>Models and settings</h2>
+        <h3>AutoML: screen, tune, optionally combine</h3>
+        <ol>
+          <li><strong>Screen:</strong> cross-validate every selected algorithm with predefined settings on the training portion.</li>
+          <li><strong>Tune:</strong> take the best <strong>Algorithms to tune</strong> candidates and run Optuna searches, sharing the tuning time budget.</li>
+          <li><strong>Combine:</strong> if enabled and at least two algorithms are in the shortlist, try a soft-voting ensemble that averages class probabilities. Select the best candidate by the CV objective; the ensemble is not guaranteed to win.</li>
+        </ol>
+        <p>The 14 available algorithms are <strong>AdaBoost, CatBoost, ElasticNet, ExtraTrees, GradientBoosting, HistGradientBoosting, LASSO, LightGBM, MLPC, RandomForest, Ridge, SVC, NuSVC and XGBoost</strong>. LASSO, Ridge and ElasticNet here are regularized binary classifiers, not regression tasks. MLPC is a neural-network classifier. AutoML only compares algorithms you selected.</p>
+        <p>Ranking choices are <strong>Cohen’s kappa × MCC</strong> (implemented as the square root of the product after clipping negative values to zero), <strong>ROC AUC</strong>, <strong>Balanced accuracy</strong> and <strong>F1</strong>. Higher scores are better. The leaderboard’s objective, rather than the rounded displayed score alone, determines rank; <strong>Control fitting</strong> changes the objective using the train/validation gap. It does not prove that overfitting has been prevented.</p>
+        <h3>Single algorithm</h3>
+        <p>Select one algorithm and choose <strong>Optuna</strong>, <strong>Bayes</strong>, <strong>Grid</strong> or <strong>Predefined</strong> hyperparameters. Predefined fits the bundled settings without a hyperparameter search. Grid uses the bundled parameter grid, so its number of fits is not capped by the trials field. The AutoML ranking-metric selector and time budget apply to AutoML, not to a single-algorithm search.</p>
+        <div class="table-wrap"><table><caption>Starting defaults, before you change the form</caption><thead><tr><th>Setting</th><th>Default</th><th>Practical meaning</th></tr></thead><tbody>
+          <tr><td>Mode / candidates</td><td>AutoML / all 14</td><td>A broad screen can be expensive. Reduce the candidate list for a workflow check.</td></tr>
+          <tr><td>Algorithms to tune</td><td>3</td><td>The shortlist shares the tuning time budget.</td></tr>
+          <tr><td>Tuning time budget</td><td>10 minutes</td><td>Applies to tuning, not the whole job. 0 removes this budget. A running trial may finish after the nominal limit.</td></tr>
+          <tr><td>Trials / CV folds</td><td>50 / 5</td><td>Trials are per tuned algorithm. AutoML uses stratified, shuffled folds within the training portion; supply enough samples of each class.</td></tr>
+          <tr><td>Test size / seed</td><td>0.2 / 12</td><td>About 20% of eligible rows become the test portion. The outer split is random and <strong>not stratified</strong>; it is not a group-aware or time-aware split.</td></tr>
+          <tr><td>Selection / normalization</td><td>HVF / min-max per sample</td><td>These expression-oriented defaults may be unsuitable for general tabular measurements. Confirm the input’s log scale before HVF.</td></tr>
+          <tr><td>Sampling / control fitting</td><td>None / off</td><td>Oversample uses SMOTE. Undersample uses Tomek links then random undersampling. Some estimators also use built-in class balancing.</td></tr>
+          <tr><td>Ensemble / explanations / ROC</td><td>Ensemble on; other outputs off</td><td>Additional fits and explanations can greatly increase runtime.</td></tr>
+        </tbody></table></div>
+        <p>The final saved model is fitted on the training portion, possibly resampled. It is not automatically refitted on all labeled rows. A displayed training count after sampling may differ from the number of original training samples.</p>
+      </section>
+
+      <section id="jobs">
+        <p class="section-number">08</p><h2>Follow a job</h2>
+        <p>After <strong>Start training</strong> or <strong>Start prediction</strong>, open <strong>Jobs</strong> and select the item. Watch its status, stage, settings and log. Jobs can be queued, running, succeeded, failed, cancelled or interrupted. With accounts enabled, the job continues if you close the browser or log out; sign in again to inspect it.</p>
+        <p><strong>Cancel</strong> stops a queued or running job. A cancelled, interrupted or failed run is not a completed model and is not available as a finished training job in Predict. Read the last log lines, fix the setup and submit a new job. Some result files may already exist from a partial run.</p>
+        <p>The default server runs <strong id="max-running">1</strong> job at a time. With accounts on, the default quota is 3 queued/running jobs per user, configurable by the administrator. Queued time is separate from model runtime. A server restart interrupts running work; save valuable results before maintenance.</p>
+        <p>Use <strong>Delete</strong> only when you intend to remove that job and its files. Download the bundle and results first. Deleting a training job removes the model used for future browser predictions. A data set cannot be deleted while a queued/running job uses it.</p>
+      </section>
+
+      <section id="scores">
+        <p class="section-number">09</p><h2>Read scores and the leaderboard</h2>
+        <p>Separate the <strong>AutoML leaderboard</strong> (CV comparisons used to choose a model) from the <strong>Train / Test scores</strong> of the final fit. A large Train–Test gap or a large Train–CV gap suggests instability or overfitting. Close scores do not establish validity; small samples, leakage and repeated tuning can also hide problems.</p>
+        <div class="table-wrap"><table><caption>Key metrics and how to interpret them</caption><thead><tr><th>Metric</th><th>Meaning</th></tr></thead><tbody>
+          <tr><td>Accuracy</td><td>Fraction of correct labels. A majority-class classifier can score highly on an imbalanced data set.</td></tr>
+          <tr><td>Sensitivity / specificity</td><td>Fraction of true positive / true negative samples correctly identified. Their interpretation depends on the positive class you chose.</td></tr>
+          <tr><td>Precision / NPV</td><td>Fraction of positive / negative predictions that are correct in this evaluation sample. These depend on class prevalence.</td></tr>
+          <tr><td>F1 / MCC / Cohen’s kappa</td><td>Complementary classification summaries. F1 balances positive-class precision and recall; MCC and kappa account for both classes or chance agreement. No single metric replaces class counts and the confusion matrix.</td></tr>
+          <tr><td>AUC (probability)</td><td>ROC AUC using positive-class probabilities. This is the more informative AUC row for ranking predictions. Chance ranking is about 0.5; AUC does not assess calibration or a chosen decision threshold.</td></tr>
+          <tr><td>AUC</td><td>A legacy row calculated from hard class predictions, equal to balanced accuracy when both classes are present. Do not mistake it for probability-based ROC AUC. The headline Test AUC uses the probability row when available.</td></tr>
+          <tr><td>Average Precision Score</td><td>Summarizes positive-class precision/recall using probabilities; its baseline depends on positive-class prevalence.</td></tr>
+          <tr><td>Brier Score Loss</td><td>Mean squared probability error. Lower is better; a good value alone does not establish calibration in a new population.</td></tr>
+          <tr><td>NegLog2-RMSL</td><td>A custom composite of test losses and train/test differences; higher is generally better. It is not a log-likelihood, probability, standard calibration score or universal acceptance threshold.</td></tr>
+          <tr><td>Test loss column</td><td>Usually 1 minus the metric, but Brier loss and negative likelihood ratio are kept as raw losses. Do not assume every row is scaled the same way.</td></tr>
+        </tbody></table></div>
+        <p>The confusion matrix shows counts of true versus predicted classes; check the axes and class names. Undefined metrics, for example when there is only one test class or no predicted positives, may appear blank. They are not evidence of a perfect result.</p>
+        <p>The leaderboard includes screened/tuned candidates and an optional ensemble. <strong>Score</strong> is the chosen CV metric, <strong>SD</strong> is variability across those folds (not a confidence interval), and <strong>Train-CV gap</strong> is the training minus validation score. Candidates reuse the same CV folds, so the winning CV score is itself selected and can be optimistic.</p>
+      </section>
+
+      <section id="explanations">
+        <p class="section-number">10</p><h2>Understand explanations</h2>
+        <ul>
+          <li><strong>Feature importance:</strong> exports built-in tree importance or signed coefficients where available, plus the mean change in test accuracy from permuting a feature five times. Unsupported built-in importance is blank. Negative permutation importance can occur. Correlated predictors can share or mask importance; values from different algorithms need not have the same meaning.</li>
+          <li><strong>SHAP:</strong> a PDF of summary plots and per-sample waterfalls for the positive class. The explanation scale depends on the explainer/model: inspect its axes rather than assuming every value is a probability change. A fallback explainer may be slower; unsupported individual plots can be skipped and logged.</li>
+          <li><strong>LIME:</strong> a PDF with local approximations for individual samples, generally showing the top 10 features. It describes a local surrogate, not the full classifier. Perturbed samples and the reference data influence the explanation.</li>
+          <li><strong>ROC curve:</strong> an optional repeated-CV summary for the chosen model recipe, using all eligible labeled data after selection. It is a different analysis from the single test split. The current implementation uses repeated random K-folds, not stratified repeats, and does not repeat feature selection and model search within each fold.</li>
+        </ul>
+        <p>SHAP and LIME use the samples being explained as reference/background data. Explanations can change when you submit a different prediction batch even if an individual sample’s model prediction is unchanged. They do not identify causes or independently validate biomarkers.</p>
+        <div class="callout"><strong>Estimate the cost before enabling ROC.</strong> With the default 5 folds and 50 trials, the ROC option requests 250 extra fits of the selected recipe; an ensemble fits each member. SHAP and LIME add work for each explained sample and can create large PDFs. Start without them, then enable only what your analysis needs.</div>
+      </section>
+
+      <section id="prediction">
+        <p class="section-number">11</p><h2>Predict new samples</h2>
+        <ol>
+          <li>Open <strong>Predict</strong> and choose a <strong>succeeded training job</strong> from your account. Train a model first if none is available.</li>
+          <li>Upload a CSV/TSV/TXT sample × numeric-feature table, with sample names in the first column. A target column and labels file are not needed.</li>
+          <li>Provide <strong>every selected model feature</strong>, with the exact same column names and compatible measurements. Column order may differ: the saved bundle reorders them. Extra columns are ignored; missing required feature columns cause an error. Missing cells within a present column are zero-filled by the file reader.</li>
+          <li>Keep <strong>Normalization = Same as the model</strong> and leave class fields blank for the usual workflow. Overriding normalization changes the input scale. Class-name overrides relabel outputs; they do not retrain, reverse or change the model’s definition of positive.</li>
+          <li>Select optional SHAP/LIME outputs if required, then <strong>Start prediction</strong>. Read the completed job and download the prediction spreadsheet.</li>
+        </ol>
+        <p>The full <code>*_test_prediction.xlsx</code> contains one row per new sample, a predicted class name and <code>pred_proba</code>, the model’s estimated probability of the <strong>training positive class</strong>. It is not automatically calibrated or a confidence interval. The class label follows the estimator’s decision rule; for some models it need not equal a simple 0.5 cut-off on the exported probability. There is no browser setting for choosing another threshold.</p>
+        <p>The Jobs prediction preview shows at most 500 rows. Download the spreadsheet for the complete output. Predictions alone do not measure accuracy; assess them against independently obtained outcomes outside this prediction form.</p>
+        <p id="model-upload-note">Model-bundle uploads are disabled by default when accounts are enabled. Use your own finished training job. On a server that permits bundle uploads, only trusted alphaML 2.0 <code>*_bundle.pkl</code> files are supported; loading a pickle can execute code. Models from alphaML 0.x require retraining.</p>
+      </section>
+
+      <section id="downloads">
+        <p class="section-number">12</p><h2>Save results and models</h2>
+        <p>Open a completed job to preview tables and plots, download individual files or select <strong>Download all</strong>. The ZIP includes the job’s result files and log; it does <strong>not</strong> include the original uploaded input files or the complete submitted job settings. Keep your original files and record the job’s <strong>Settings</strong> panel separately.</p>
+        <div class="table-wrap"><table><caption>Common result files (the prefix contains target/model settings)</caption><thead><tr><th>File</th><th>Use</th></tr></thead><tbody>
+          <tr><td><code>*_bundle.pkl</code></td><td>Trained estimator, selected feature order, normalization, class names, algorithm, parameters and alphaML version. Required for reuse outside the current job. Preserve a compatible Python/software environment.</td></tr>
+          <tr><td><code>selected_features.csv</code>, <code>*_Feat_M*.csv</code></td><td>Final feature names and intermediate selection outputs, where applicable.</td></tr>
+          <tr><td><code>*_scores.csv</code>, <code>summary.json</code></td><td>Final train/test scores and a machine-readable summary. The summary is not a full copy of all input settings.</td></tr>
+          <tr><td><code>*_test_prediction.xlsx</code></td><td>In a training job: test rows only, including encoded true/predicted labels and class names. In a prediction job: all submitted new samples and predicted class names. <code>pred_proba</code> means positive-class probability.</td></tr>
+          <tr><td><code>*_unlabeled_prediction.xlsx</code></td><td>Predictions for an optional unlabeled table supplied during training.</td></tr>
+          <tr><td><code>*_normalized_*.csv</code></td><td>Selected numeric matrices after the chosen row-wise normalization. They can contain sensitive measurements; treat downloads according to your data policy.</td></tr>
+          <tr><td><code>*_AutoML_leaderboard.csv</code> / <code>.png</code></td><td>Candidate ranking and a visual overview for AutoML runs.</td></tr>
+          <tr><td><code>*_parameters.json</code>, confusion matrix, training curve</td><td>Chosen parameters and diagnostics. A training curve is available for supported single-model fits; it is not a learning curve across different study sample sizes.</td></tr>
+          <tr><td>Importance, SHAP/LIME PDFs, repeated-CV files</td><td>Appear when requested and successfully generated. Check the log for skipped plots.</td></tr>
+        </tbody></table></div>
+        <p>For a reproducible analysis, retain the exact inputs and sample alignment, class definitions, four selection methods and their settings, normalization, test size, seed, sampling, candidate list, ranking metric, CV folds, search/trial/time settings, output options, package versions, bundle, selected features, scores and log. A fixed seed helps repeat a run but does not ensure identical results across platforms, library versions or time-limited searches.</p>
+      </section>
+
+      <section id="limits">
+        <p class="section-number">13</p><h2>Scientific and practical limits</h2>
+        <div class="callout caution"><strong>Use alphaML for research exploration.</strong> A successful job or a high score does not establish clinical usefulness, generalization, causal relevance or deployment readiness.</div>
+        <h3>What the internal evaluation does not protect against</h3>
+        <ul>
+          <li><strong>Selection before splitting:</strong> feature selection happens before the test split. Supervised methods can see future test labels; unsupervised methods can see future test feature distributions. Selection is not fitted anew within the model CV folds. An externally prespecified panel or <strong>None</strong> avoids label-driven feature selection within alphaML, but other biases still need attention.</li>
+          <li><strong>Sampling before model CV:</strong> optional SMOTE/undersampling is applied to the training portion before its model-selection folds are made. It is not repeated separately inside each fold. This can affect validation estimates, particularly with synthetic samples. Repeated ROC sampling is likewise done before its folds.</li>
+          <li><strong>Random split limitations:</strong> the outer test split is not stratified, grouped or chronological. Small or imbalanced data can leave too few samples of a class in a split or fold. Repeated samples from one person, family, site or batch can leak information between splits.</li>
+          <li><strong>Reuse of evaluation:</strong> choosing among many algorithms on the same CV folds, repeatedly changing settings after viewing test results, or selecting a threshold from those results can make reported performance optimistic. Repeated ROC reuses an already selected recipe and feature set; it is not nested independent validation.</li>
+          <li><strong>Distribution shift:</strong> new assay platforms, units, batches, populations or prevalence can change performance and probability interpretation. The app does not automatically flag out-of-distribution samples or monitor a deployed model.</li>
+          <li><strong>Uncertainty and explanations:</strong> the interface does not provide a full model-selection uncertainty analysis, calibrated prediction intervals, causal effects, fairness assessment or prospective clinical validation.</li>
+        </ul>
+        <p>For a manuscript or substantive application, use a validation design suited to the study: keep an external cohort untouched by feature/model/threshold selection, and use an independently implemented nested, group-aware or time-aware pipeline where needed. The web interface does not configure those designs for you. Download enough information to report the actual analysis and its limitations.</p>
+        <h3>Files and computation</h3>
+        <p>The default per-file upload limit is <strong id="max-upload">2048 MB</strong>, sent in chunks of <strong id="upload-chunk">8 MB</strong>. This is an upload limit, not a guarantee that a file of that size can be parsed or modeled in memory. Wide data, grids, sequential/RFE selection, SHAP/LIME and repeated CV may need substantial RAM and CPU. Available resources determine feasibility.</p>
+        <p>The AutoML time budget covers tuning only. Screening, selection, an in-progress trial, final fitting and optional outputs can continue beyond it. Reduce feature count, candidates, trials or optional outputs when work becomes too expensive. A zero-minute budget means no tuning time limit, not zero work.</p>
+      </section>
+
+      <section id="accounts">
+        <p class="section-number">14</p><h2>Accounts and privacy</h2>
+        <p id="account-mode">With accounts enabled, register using your email and a password of at least 8 characters, agree to the privacy terms and sign in. A sign-up code may be required, or registration may be restricted by the administrator.</p>
+        <p>Your own data sets, jobs and downloads are visible to your account. The built-in example is shared and read-only. Account isolation does not mean that files stay in your browser: uploads and results are processed and stored on the server, and the operator can access server storage.</p>
+        <ul>
+          <li><strong>What is stored:</strong> your email, a salted password hash, privacy-agreement version/time, session/reset records, uploaded files, job settings, logs and results. A necessary login cookie keeps you signed in; the app’s notice states it has no advertising/tracking cookies.</li>
+          <li><strong>Retention:</strong> <span id="retention-text">with accounts enabled, data sets and jobs are normally removed 14 days after upload/submission. Cleanup runs periodically and protects active inputs while in use.</span> Check each item’s deletion date and download results before it expires. Account records remain until you delete the account.</li>
+          <li><strong>Upload policy:</strong> follow the linked privacy notice and supply only anonymised data. Do not include names, dates of birth, linkable patient identifiers or identifiable health/genetic data. An arbitrary sample code alone does not establish that a data set is anonymous.</li>
+          <li><strong>Password changes:</strong> use the account menu. For a forgotten password, choose <strong>Forgot your password?</strong> on the login screen. If email reset is configured, the requested link is single-use and valid for 60 minutes; the response does not reveal whether an email has an account. Check spam, or contact the administrator if mail is unavailable.</li>
+          <li><strong>Deletion:</strong> individual Delete controls remove data sets or jobs. The account menu’s <strong>Delete account and data</strong> requires your password and removes the account and its associated data. Download anything you need first.</li>
+          <li><strong>Questions and rights:</strong> use the operator/contact in the current <a href="/#/privacy">privacy notice</a>. This handbook explains the application and does not replace that notice.</li>
+        </ul>
+        <p>If accounts are disabled on a local server, anyone who can open that server can see its data. Check the current server configuration; do not assume a local-looking URL means all processing happens on your own device.</p>
+      </section>
+
+      <section id="troubleshooting">
+        <p class="section-number">15</p><h2>Troubleshooting</h2>
+        <div class="table-wrap"><table><caption>Common problems and next steps</caption><thead><tr><th>What you see</th><th>What to check</th></tr></thead><tbody>
+          <tr><td>No class column / no usable labels</td><td>Use a separate labels file with sample names first and an outcome column containing 2–50 distinct values. Check delimiter, header and missing labels.</td></tr>
+          <tr><td>Zero/few matched labels or unexpected sample count</td><td>Compare sample codes exactly, inspect row-order fallback/dropped-label messages, and confirm the two chosen classes. Fix alignment outside the app before continuing.</td></tr>
+          <tr><td>Both classes must be present / CV or SMOTE error</td><td>Check retained class counts after matching and filtering. Reduce folds or turn sampling off. SMOTE’s default neighborhood needs more than five minority training rows. A passing run still does not establish adequate study size.</td></tr>
+          <tr><td>HVF fails or selects an unexpected subset</td><td>Check the input log scale, finite numeric values, count/dispersion settings and log fallback. Try None or another appropriate method for a workflow check.</td></tr>
+          <tr><td>NMF, PCA, clustering, RFE or sequential selection fails</td><td>Use feasible counts for the current sample/feature dimensions; NMF requires non-negative data. Reduce the input first and check each preceding selection step.</td></tr>
+          <tr><td>Constant/uninformative predictions</td><td>Inspect labels, zero-filled values, constant columns, selection and normalization. A single feature with row-wise min-max/standardization becomes zero for every sample. Refit with a justified setup.</td></tr>
+          <tr><td>Prediction reports missing model features</td><td>Use the saved selected-feature list; fix spelling/case and supply all required columns. Do not fabricate zero columns for measurements that were never obtained.</td></tr>
+          <tr><td>Job seems slow or the time budget passed</td><td>Check the stage/log. The budget is not a whole-job timeout. ROC costs folds × trials extra fits, and explanations can be expensive. Cancel and reduce the setup if appropriate.</td></tr>
+          <tr><td>Upload fails / file too large</td><td>Use CSV/TSV/TXT within the current per-file limit, keep the page open while chunks transfer, and retry after checking the connection. Unused uploads are cleaned up after about a day.</td></tr>
+          <tr><td>No model available in Predict / missing result files</td><td>Choose a succeeded training job from your account. Failed/partial runs do not qualify. Check retention/deletion and whether optional outputs were requested.</td></tr>
+          <tr><td>Cannot load the built-in example</td><td>Its first load needs the external figshare download. Use the handbook’s small synthetic files or ask the administrator to check connectivity.</td></tr>
+          <tr><td>Login, consent or reset problem</td><td>Check the email, current privacy agreement and sign-up policy. Request a fresh reset link if expired/used; avoid repeated attempts during a rate-limit lockout. Contact the operator if email is unavailable.</td></tr>
+        </tbody></table></div>
+        <p>When asking for help, include the job type, alphaML version, selected methods/model, dimensions, class counts and relevant error text. Do not email passwords, reset links, raw sensitive data or identifiable sample names.</p>
+      </section>
+
+      <section id="glossary">
+        <p class="section-number">16</p><h2>Glossary and support</h2>
+        <dl><dt>Feature</dt><dd>A numeric input variable, such as an expression measurement.</dd><dt>Target / class column</dt><dd>The label to predict. One target and two chosen class values are used per run.</dd><dt>Training / test portion</dt><dd>Rows used to fit/select a model versus rows reserved by the outer random split. The preprocessing limitations above still apply.</dd><dt>Cross-validation (CV)</dt><dd>Repeated fitting on subsets of training data to compare candidates. It is not a substitute for an untouched external cohort.</dd><dt>Hyperparameter / trial</dt><dd>A model setting chosen before fitting / one candidate configuration evaluated during a search.</dd><dt>Ensemble</dt><dd>A predictor averaging probabilities from several fitted classifiers.</dd><dt>Model bundle</dt><dd>The saved estimator plus feature order, normalization and class metadata needed to predict consistently.</dd><dt>Leakage</dt><dd>Information entering model development that would not have been available for a genuinely new sample.</dd></dl>
+        <p>For support or privacy questions: <span id="support-contact">use the contact in the application’s <a href="/#/privacy">privacy notice</a></span>.</p>
+      </section>
+      <footer class="book-footer"><span>alphaML 2.0 · Research use</span><a href="#content">Back to top ↑</a><a href="/#/train">Return to application</a></footer>
+    </main>
+  </div>
+</body>
+</html>
