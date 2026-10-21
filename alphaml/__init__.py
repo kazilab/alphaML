@@ -1,15 +1,25 @@
 """
-******************
-***   alphaML  ***
-******************
+***********************
+***   alphaML 2.0   ***
+***********************
 
-Build an optimized binary classification model from tabular data
+AutoML for explainable (CLETE) binary classification models from tabular data
 """
 __author__ = 'Julhash Kazi'
 __email__ = 'aml@kazilab.se'
 __description__ = 'alphaml'
-__version__ = '0.1.2'
+__version__ = '0.2.0'
 __url__ = 'https://www.kazilab.se'
 
-from .run import aml
-from .pred import pred
+__all__ = ['train', 'predict']
+
+
+def __getattr__(name):
+    # Imported on first use: worker processes import alphaml.models.folds and should not load everything
+    if name == 'train':
+        from .run import train
+        return train
+    if name == 'predict':
+        from .prediction import predict
+        return predict
+    raise AttributeError(f"module 'alphaml' has no attribute '{name}'")
